@@ -1,0 +1,194 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math2Latex</title>
+    <link rel="stylesheet" href="{% static 'css/bs.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+</head>
+<body>
+    {% if messages %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+
+    {% if error %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ error }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+    <header>
+        <nav class="navbar navbar-expand-lg navigation">
+            <div class="container-fluid px-5">
+                <a class="navbar-brand logo text-white" href="#"></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fa-solid fa-bars" style="color: #fff;"></i>
+                </button>
+
+                <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+                    <ul class="navbar-nav">
+                        <li class="nav-item active mx-lg-3 home">
+                            <a class="nav-link d-block" aria-current="page" href="#">Trang chủ</a>
+                        </li>
+                        <li class="nav-item mx-lg-3 parallax">
+                            <a class="nav-link" href="#">Giới thiệu</a>
+                        </li>
+                        <li class="nav-item mx-lg-3 about">
+                            <a class="nav-link" href="#">Thông tin</a>
+                        </li>
+                        <button class="btn btn-primary btnPopup">Đăng nhập</button>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="content text-center">
+            <h1 class="text-white">Math OCR</h1>
+            <p class="text-white">Chuyển hình ảnh toán học thành text với công nghệ AI</p>
+        </div>
+
+        <div class="wrapper d-flex justify-content-center align-content-center py-5">
+            <div class="form-box col-xxl-5 col-sm-10 align-content-center register">
+                <span class="icon-close"><i class="fa-solid fa-x"></i></span>
+                <h2 class="text-center text-white py-3">Đăng ký</h2>
+                {% if form_signup.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        <div id="form_errors">
+                            {% for _, value in form_signup.errors.items %}
+                                <strong>{{ value }}</strong><br>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+                <form method="POST" class="row g-3 justify-content-around flex-direction-column align-content-around">
+                    {% csrf_token %}
+                    <div class="col-md-11 col-sm-10 input-box">
+                        {{ form_signup.username }}
+                        <label for="inputUsername" class="form-label">Tên tài khoản</label>
+                    </div>
+                    <div class="col-md-11 col-sm-10 input-box">
+                        {{ form_signup.email }}
+                        <label for="inputEmail" class="form-label">Email</label>
+                    </div>
+                    <div class="col-md-11 col-sm-10 input-box">
+                        {{ form_signup.password }}
+                        {{ form_signup.errors.password }}
+                        <label for="inputPassword" class="form-label">Mật khẩu</label>
+                    </div>
+                    <div class="col-md-11 col-sm-10 input-box">
+                        {{ form_signup.password_2 }}
+                        <label for="inputPassword2" class="form-label">Nhập lại mật khẩu</label>
+                    </div>
+                    <div class="col-md-11 col-sm-10">
+                        <div class="form-check">
+                            {{ form_signup.checkbox }}
+                            <label class="form-check-label" for="gridCheck">Tôi đồng ý với các điều khoản và điều kiện</label>
+                        </div>
+                    </div>
+                    <div class="col-md-11 col-sm-10">
+                        <button type="submit" class="btn btn-primary" name="register">Đăng ký</button>
+                    </div>
+                    <div class="col-md-11 col-sm-10 login-register">
+                        <p class="text-center text-white">Bạn đã có tài khoản? <a class="login-link" href="#">Đăng nhập</a></p>
+                    </div>
+                </form>
+            </div>
+    
+            <div class="form-box col-xxl-5 col-sm-10 align-content-center login active">
+                <span class="icon-close"><i class="fa-solid fa-x"></i></span>
+                <h2 class="text-center text-white">Đăng nhập</h2>
+
+                {% if form_login.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        <div id="form_errors">
+                            {% for _, value in form_login.errors.items %}
+                                <strong>{{ value }}</strong><br>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                <form method="POST" class="row g-3 justify-content-around flex-direction-column align-content-around">
+                    {% csrf_token %}
+                    <div class="col-md-11 col-sm-10 input-box">
+                        {{ form_login.username }}
+                        <label for="inputUsername" class="form-label">Tên tài khoản</label>
+                    </div>
+                    <div class="col-md-11 col-sm-10 input-box">
+                        {{ form_login.password }}    
+                        <label for="inputPassword" class="form-label">Mật khẩu</label>
+                    </div>
+                    <div class="col-md-11 col-sm-10 remember-forgot">
+                        <div class="form-check">
+                            {{ form_login.remember_me }}
+                            <label class="form-check-label" for="gridCheck">Nhớ mật khẩu</label>
+                            {% comment %} <a href="#" class="float-end">Quên mật khẩu?</a> {% endcomment %}
+                        </div>
+                    </div>
+                    <div class="col-md-11 col-sm-10">
+                        <button type="submit" class="btn btn-primary" name="login">Đăng nhập</button>
+                    </div>
+                    <div class="col-md-11 col-sm-10 login-register">
+                        <p class="text-center text-white">Bạn chưa có tài khoản? <a class="register-link" href="#">Đăng ký</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <section class="sec">
+        <div class="content">
+            <h2 class="text-white">Math OCR</h2>
+            <p class="text-white">Chào mừng bạn đến với trang web nhận dạng toán học của chúng tôi! Đây là nền tảng hàng đầu giúp bạn giải quyết các bài toán phức tạp một cách dễ dàng và nhanh chóng. Với công nghệ nhận dạng ký tự quang học (OCR) tiên tiến và thuật toán xử lý mạnh mẽ, chúng tôi có thể nhận diện và giải thích các công thức toán học từ hình ảnh hoặc tài liệu số. Dù bạn là học sinh, sinh viên hay giáo viên, công cụ của chúng tôi sẽ hỗ trợ bạn trong việc học tập và giảng dạy toán học hiệu quả hơn. Hãy trải nghiệm sự tiện lợi và chính xác mà chúng tôi mang lại, giúp việc học toán trở nên thú vị hơn bao giờ hết!
+            </p>
+        </div>
+    </section>
+
+    <!-- footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h3 class="text-white">Logo</h3>
+                    <p class="text-white">Chuyển hình ảnh toán học thành latex với công nghệ AI</p>
+                </div>
+                <div class="col-md-4">
+                    <h3 class="text-white">Liên hệ</h3>
+                    <p class="text-white">Địa chỉ: Đại học công nghiệp TP.HCM</p>
+                    <p class="text-white">Email: <a href="mailto:">lethanhdi@gmail.com</a></p>
+                    <p class="text-white">Số điện thoại: <a href="tel:">123456789</a></p>
+                </div>
+                <div class="col-md-4">
+                    <h3 class="text-white">Liên kết</h3>
+                    <ul>
+                        <li>
+                            <a href="#">Trang chủ</a>
+                        </li>
+                        <li>
+                            <a href="#">Giới thiệu</a>
+                        </li>
+                        <li>
+                            <a href="#">Thông tin</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="{% static 'js/base.js' %}"></script>
+</body>
+</html>
